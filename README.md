@@ -84,8 +84,9 @@ var hashedPasswordBase64 = Convert.ToBase64String(hashedPassword); // 8wiaJrVMxN
 ```
 
 The database may look like
-|| username || salt || hashed_password ||
-|| bob || zXoXq8NcGEIvqAPPuO7xjA== || 8wiaJrVMxNjKtMwl8iqhlQ4ylO2ta30wFoI8tJG62bJnuQPhZStFQqJzx2U2zuJ4mZg0Bg1ACaXcVQFe8ywnmg== ||
+username | salt | hashed_password
+-------- | ---- | ---------------
+bob | zXoXq8NcGEIvqAPPuO7xjA== | 8wiaJrVMxNjKtMwl8iqhlQ4ylO2ta30wFoI8tJG62bJnuQPhZStFQqJzx2U2zuJ4mZg0Bg1ACaXcVQFe8ywnmg==
 
 ### Authentication
 When bob logs in to the website he enters username: bob, password: 123456 so we would use the following process to authenticate that the password entered on login matches the password set when registering:
