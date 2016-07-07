@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Cryptography;
 
-namespace Savage.Security
+namespace Savage.Credentials
 {
     public class SaltAndHashedPassword
     {

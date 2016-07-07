@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Savage.Security
+namespace Savage.Credentials
 {
     public class SaltAndHashedPasswordTests
     {

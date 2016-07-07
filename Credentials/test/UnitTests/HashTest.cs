@@ -1,6 +1,6 @@
 ﻿using System;
 using Xunit;
-namespace Savage.Security
+namespace Savage.Credentials
 {
     public class HashTests
     {

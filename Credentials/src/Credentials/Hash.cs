@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace Savage.Security
+namespace Savage.Credentials
 {
     public static class Hash
     {
