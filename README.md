@@ -155,7 +155,11 @@ The user would then receive an email with a link containing something like:
 
 http://example.org?id=123&token=r13j4F4NzthuXOICMHLz1UbmVeTS9QC8
 
-The querystring id would reference the id for the password reset and the token is the clear text token encoded to a base64 string. Note you will want to use Url.Encode function to encode the values in the querystring first.
+The querystring id would reference the id for the password reset and the token is the clear text token encoded to a base64 string. 
+
+Note you will want to use Url.Encode function to encode the values in the querystring first, using the following code:
+
+`var urlEncodedHashedTokenBase64 = System.Net.WebUtility.UrlEncode(hashedTokenBase64);`
 
 ## Technical Details
 
