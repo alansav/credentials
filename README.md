@@ -5,17 +5,17 @@ This project is a .NET Core application.
 This project is designed to help ensure that passwords are hashed using the latest best practices for handling user passwords.
 
 ## Why
-Industry best practice is for applications to not store passwords in clear text because the risk of each users password being compromised is high. The best practice is to hash each password with a salt.
+Industry best practice is for applications to not store passwords in clear text because of the potential problems if the database is compromised. The recommended practice is to calculate the hash from the password using an approved algorithm. The result of the calculation is then stored in the database.
 
-For example:
+**For example:**
 
-A user creates an account on your website and sets his password to: 123456
+A user creates an account on your website and sets his password to: _123456_
 
 Your website needs to store the users password so when they login we can check if the password they enter on the login page matches the password they setup when they registered their account, so we might be tempted to store this in a database and store it in clear text, i.e. 123456. This presents a few security problems, if your database is accessed by a malicious user (either a hacker on the other side of the world or a disgruntled employee) they will quickly discover all passwords of each user and could login to your website as any user.
 
 Storing passwords is not best practice and we can apply algorithms called algorithms to the password to provide a "hash". There are many algorithms which we can use and a common one used is SHA-256. If we calculate the hash using the SHA-256 algorithm for the string "123456" we will have:
 
-8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
+`8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92`
 
 Hashing algorithms are one-way in that we cannot "decrypt" the hash to get the original string which was used to generate the hash. We can store the hash in the database securely and if the database is compromised then each password is secure.
 
@@ -30,21 +30,21 @@ A way to address these issues is using a "salt", this is to add something into t
 
 User 1 registers an account and sets their password as 123456, if we simply prefix the ID for the user to the password (i.e. 1#123456) and then pass this into the algorithm we would have a hash of:
 
-252dbce23d804860f7bfbc833fdcfc855e0247b4c98b7fd9f58eff1337040f56
+`252dbce23d804860f7bfbc833fdcfc855e0247b4c98b7fd9f58eff1337040f56`
 
 User 2 also registers an account and also sets their password as 123456, now we add the ID for the user to the password (i.e. 2#123456) and then the algorithm would return the following hash:
 
-edd6342a30a6348460838b685a7234d6bd3977c9582228296314d336ee43f35b
+`edd6342a30a6348460838b685a7234d6bd3977c9582228296314d336ee43f35b`
 
 The resulting hash for user 1 is completely different from the hash for user 2 even though only 1 digit was different.
 
 The other benefit of using hashes is the resulting hash is always the same length, so the result from using SHA-256 to hash the password "1" is:
 
-6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
+`6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b`
 
 and the result from hashing "The quick brown fox jumps over the lazy dog" is:
 
-d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592
+`d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592`
 
 Both passwords generate a hash which is 64 characters in length.
 
