@@ -147,8 +147,9 @@ or if we prefer we could store the hashed token as a string in the database:
 
 We might have a table in our database called reset_password which would contain this row of data:
 
-id|date_issued|hashed_token|date_verified
-123|2016-07-08 08:00:|ofDSQoCBaHJkZ6jtBj8iVtaUp8+aRWkfGrT2l09AZ+b1NdWqNveNGZkfg8BZPMUeaZfsQZJAnOFkBEJ3+yWcTA==|null
+id | date_issued | hashed_token | date_verified
+-- | ----------- | ------------ | -------------
+123 | 2016-07-08 08:00:00 | ofDSQoCBaHJkZ6jtBj8iVtaUp8+aRWkfGrT2l09AZ+b1NdWqNveNGZkfg8BZPMUeaZfsQZJAnOFkBEJ3+yWcTA==|null
 
 The user would then receive an email with a link containing something like:
 
