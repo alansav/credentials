@@ -92,10 +92,10 @@ The database table may look like
 ### Authentication
 When bob logs in to the website he enters username: bob, password: 123456 so we would use the following process to authenticate that the password entered on login matches the password set when registering:
 
-1, We would retrieve the salt and hashed password for the user bob from the database and then call the method ComparePassword to calculate the hash for the provided password using the salt and check to see if this matches the hashed password stored in the database, if these match then the user is authenticated:
+We would retrieve the salt and hashed password for the user bob from the database and then call the method ComparePassword to calculate the hash for the provided password using the salt and check to see if this matches the hashed password stored in the database, if these match then the user is authenticated:
 
 ```
-//Convert the strings to byte[]
+//The below code would be replaced with a call to the database to retrieve the salt and hashedPassword for the username provided
 var salt = Convert.FromBase64String("zXoXq8NcGEIvqAPPuO7xjA==");
 var hashedPassword = Convert.FromBase64String("8wiaJrVMxNjKtMwl8iqhlQ4ylO2ta30wFoI8tJG62bJnuQPhZStFQqJzx2U2zuJ4mZg0Bg1ACaXcVQFe8ywnmg==");
 
@@ -104,6 +104,57 @@ var saltAndHashedPassword = Savage.Credentials.SaltAndHashedPassword.Load(salt, 
 
 bool authenticated = saltAndHashedPassword.ComparePassword("123456"); // authenticated = true
 ```
+
+### Change Password
+
+If we want to allow a user to change their password we would typically have a form with fields for their current password and their new password. We would use the same code as detailed in the authentication section. The users current password would be passed to the ComparePassword method and if the result is true we can then proceed to set a new password:
+
+`var saltAndHashedPassword = Savage.Credentials.SaltAndHashedPassword.New("new_password");`
+
+We would then store the value of the properties Salt and HashedPassword in our database for that user:
+
+```
+var salt = saltAndHashedPassword.Salt; //an array of bytes (length = 16)
+var hashedPassword = saltAndHashedPassword.HashedPassword; //an array of bytes (length = 64)
+```
+
+or if we prefer we could store the values as a string:
+```
+var saltBase64 = Convert.ToBase64String(salt); // 9vG/lVipM704diYwwWs/eQ==
+var hashedPasswordBase64 = Convert.ToBase64String(hashedPassword); // yNEM7eRufrFqdsnlCoknTGNZb+3mT9At5Lfj/152IRCLl466h/B/afdNqJmt+zeulUbmkagiZR7pEDYNB1xhww==
+```
+
+### Reset Password
+Since we are no longer storing the user's password in the database we are not able to email the user's password to them, we can't send them the hash since they cannot do anything with it.
+If the user has forgotten their password then the credentials library has the capability to generate tokens which can then be emailed to the user to perform a password reset.
+
+We would have a page which allows the user to enter the email address and then we use the following code to generate a token:
+
+`var token = Savage.Credentials.Token.Create(24); //24 bytes in length`
+
+This object has the following properties available:
+
+`var clearTextToken = token.ClearTextToken //an array of bytes (length = 24);`
+
+The ClearTextToken is what we would sent to the user (possibly as a querystring value in a link which they can click to complete the next stage of a password reset)
+`var clearTextTokenBase64 = Convert.ToBase64String(clearTextToken); // r13j4F4NzthuXOICMHLz1UbmVeTS9QC8`
+
+We would not want to store the ClearTextToken in the database so we would call the GetHashedToken value and store that in the database:
+`var hashedToken = token.GetHashedToken(); //an array of bytes (length = 64)`
+
+or if we prefer we could store the hashed token as a string in the database:
+`var hashedTokenBase64 = Convert.ToBase64String(hashedToken); //ofDSQoCBaHJkZ6jtBj8iVtaUp8+aRWkfGrT2l09AZ+b1NdWqNveNGZkfg8BZPMUeaZfsQZJAnOFkBEJ3+yWcTA==`
+
+We might have a table in our database called reset_password which would contain this row of data:
+
+id|date_issued|hashed_token|date_verified
+123|2016-07-08 08:00:|ofDSQoCBaHJkZ6jtBj8iVtaUp8+aRWkfGrT2l09AZ+b1NdWqNveNGZkfg8BZPMUeaZfsQZJAnOFkBEJ3+yWcTA==|null
+
+The user would then receive an email with a link containing something like:
+
+http://example.org?id=123&token=r13j4F4NzthuXOICMHLz1UbmVeTS9QC8
+
+The querystring id would reference the id for the password reset and the token is the clear text token encoded to a base64 string. Note you will want to use Url.Encode function to encode the values in the querystring first.
 
 ## Technical Details
 
