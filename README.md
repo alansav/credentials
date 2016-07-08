@@ -2,18 +2,18 @@
 
 This project is a .NET Core application.
 
-This project is designed to help ensure that passwords are hashed using the latest best practices for handling user passwords.
+This project is designed to help ensure that passwords are handled using the current best practice.
 
 ## Why
-Industry best practice is for applications to not store passwords in clear text because of the potential problems if the database is compromised. The recommended practice is to calculate the hash from the password using an approved algorithm. The result of the calculation is then stored in the database.
+Industry best practice is for applications to never store passwords in clear text because of the potential problems if the database is compromised. The recommended practice is to calculate the hash from the password using an approved algorithm. The result of the calculation, the hash, is then stored in the database.
 
 **For example:**
 
 A user creates an account on your website and sets his password to: _123456_
 
-Your website needs to store the users password so when they login we can check if the password they enter on the login page matches the password they setup when they registered their account, so we might be tempted to store this in a database and store it in clear text, i.e. 123456. This presents a few security problems, if your database is accessed by a malicious user (either a hacker on the other side of the world or a disgruntled employee) they will quickly discover all passwords of each user and could login to your website as any user.
+Your website needs to store the users password so when they login we can check if the password they enter on the login page matches the password the user specified when they registered their account, so we might be tempted to store this in a database as clear text, i.e. 123456. This presents a few security problems, if your database is accessed by a malicious user (either a hacker on the other side of the world or a disgruntled employee) they will quickly discover all passwords of each user and could login to your website as any user. Also, the user may use the same password on other websites which would put these websites at risk also. 
 
-Storing passwords is not best practice and we can apply algorithms called algorithms to the password to provide a "hash". There are many algorithms which we can use and a common one used is SHA-256. If we calculate the hash using the SHA-256 algorithm for the string "123456" we will have:
+Storing passwords is not best practice and we can apply algorithms to the password to calculate a "hash". There are many algorithms which we can use and a common one used is SHA-256. If we calculate the hash using the SHA-256 algorithm for the string "123456" we will have:
 
 `8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92`
 
