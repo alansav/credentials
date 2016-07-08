@@ -11,7 +11,7 @@ Industry best practice is for applications to never store passwords in clear tex
 
 A user creates an account on your website and sets his password to: _123456_
 
-Your website needs to store the users password so when they login we can check if the password they enter on the login page matches the password the user specified when they registered their account, so we might be tempted to store this in a database as clear text, i.e. 123456. This presents a few security problems, if your database is accessed by a malicious user (either a hacker on the other side of the world or a disgruntled employee) they will quickly discover all passwords of each user and could login to your website as any user. Also, the user may use the same password on other websites which would put these websites at risk also. 
+Your website needs to store the users password so when they login we can check if the password they enter on the login page matches the password the user specified when they registered their account, so we might be tempted to store this in a database as clear text, i.e. 123456. This presents a few security problems, if your database is accessed by a malicious user (either a hacker on the other side of the world or a disgruntled employee) they will quickly discover the password for all users and could login to your website as any user. Also, a number of users on your website may use the same password on other websites which would put their login to these websites at risk also. 
 
 Storing passwords is not best practice and we can apply algorithms to the password to calculate a "hash". There are many algorithms which we can use and a common one used is SHA-256. If we calculate the hash using the SHA-256 algorithm for the string "123456" we will have:
 
