@@ -1,6 +1,6 @@
 # credentials
 
-This project is a .NET Core application.
+This project is a .NET Core class library.
 
 This project is designed to help ensure that passwords are handled using the current best practice.
 
