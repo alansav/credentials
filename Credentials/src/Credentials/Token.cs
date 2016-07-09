@@ -1,9 +1,11 @@
-﻿namespace Savage.Credentials
+﻿using System.Linq;
+
+namespace Savage.Credentials
 {
     public class Token
     {
         public readonly byte[] ClearTextToken;
-        
+
         private Token(byte[] clearTextToken)
         {
             ClearTextToken = clearTextToken;
@@ -19,9 +21,14 @@
             return new Token(clearTextToken);
         }
         
-        public byte[] GetHashedToken()
+        public byte[] HashToken()
         {
             return Hash.HashBytes(ClearTextToken);
+        }
+
+        public bool CompareToken(byte[] expectedHashedToken)
+        {
+            return expectedHashedToken.SequenceEqual(HashToken());
         }
     }
 }
