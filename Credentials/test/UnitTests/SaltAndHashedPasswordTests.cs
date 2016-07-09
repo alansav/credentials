@@ -1,9 +1,28 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace Savage.Credentials
 {
     public class SaltAndHashedPasswordTests
     {
+        [Fact]
+        public void New_Should_throw_exception_when_password_is_null()
+        {
+            Assert.Throws<ArgumentNullException>(() => SaltAndHashedPassword.New(null));
+        }
+
+        [Fact]
+        public void New_Should_throw_exception_when_password_is_empty_string()
+        {
+            Assert.Throws<ArgumentException>(() => SaltAndHashedPassword.New(String.Empty));
+        }
+
+        [Fact]
+        public void New_Should_throw_exception_when_salt_length_is_zero()
+        {
+            Assert.Throws<ArgumentException>(() => SaltAndHashedPassword.New("password", 0));
+        }
+
         [Fact]
         public void New_Should_create_SaltAndHashedPassword_with_different_values_for_Salt_when_same_password_is_used()
         {
@@ -22,6 +41,22 @@ namespace Savage.Credentials
             var compare = SaltAndHashedPassword.New("password");
             
             Assert.NotEqual(subject.HashedPassword, compare.HashedPassword);
+        }
+
+        [Fact]
+        public void New_Should_create_SaltAndHashedPassword_with_default_salt_length_of_16()
+        {
+            var subject = SaltAndHashedPassword.New("password");
+
+            Assert.True(subject.Salt.Length == 16);
+        }
+
+        [Fact]
+        public void New_Should_create_SaltAndHashedPassword_with_specified_salt_length()
+        {
+            var subject = SaltAndHashedPassword.New("password", 24);
+
+            Assert.True(subject.Salt.Length == 24);
         }
 
         [Fact]

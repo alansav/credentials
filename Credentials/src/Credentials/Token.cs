@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Savage.Credentials
 {
@@ -18,6 +19,9 @@ namespace Savage.Credentials
 
         public static Token Load(byte[] clearTextToken)
         {
+            if (clearTextToken == null)
+                throw new ArgumentNullException(nameof(clearTextToken));
+
             return new Token(clearTextToken);
         }
         
@@ -28,7 +32,8 @@ namespace Savage.Credentials
 
         public bool CompareToken(byte[] expectedHashedToken)
         {
-            return expectedHashedToken.SequenceEqual(HashToken());
+            var actualHashedToken = HashToken();
+            return expectedHashedToken.SequenceEqual(actualHashedToken);
         }
     }
 }

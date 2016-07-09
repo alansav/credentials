@@ -36,5 +36,23 @@ namespace Savage.Credentials
 
             Assert.True(subject.CompareToken(expectedHashedToken));
         }
+
+        [Fact]
+        public void Create_Should_throw_exception_when_length_is_zero()
+        {
+            Assert.Throws<ArgumentException>(() => Token.Create(0));
+        }
+
+        [Fact]
+        public void Load_Should_throw_exception_when_clearTextToken_is_null()
+        {
+            Assert.Throws<ArgumentNullException>(() => Token.Load(null));
+        }
+
+        public void Load_Should_throw_exception_when_clearTextToken_is_empty()
+        {
+            var emptyBytes = new byte[0];
+            Assert.Throws<ArgumentException>(() => Token.Load(emptyBytes));
+        }
     }
 }

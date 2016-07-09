@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace Savage.Credentials
@@ -14,9 +15,12 @@ namespace Savage.Credentials
             HashedPassword = hashedPassword;
         }
 
-        public static SaltAndHashedPassword New(string password)
+        public static SaltAndHashedPassword New(string password, int saltLength = 16)
         {
-            var salt = RandomBytesGenerator.Generate(16);
+            if (password == string.Empty)
+                throw new ArgumentException(nameof(password));
+
+            var salt = RandomBytesGenerator.Generate(saltLength);
             return new SaltAndHashedPassword(salt, HashPassword(salt, password));
         }
 
@@ -34,7 +38,8 @@ namespace Savage.Credentials
 
         public bool ComparePassword(string password)
         {
-            return HashedPassword.SequenceEqual(HashPassword(Salt, password));
+            var calculatedHash = HashPassword(Salt, password);
+            return HashedPassword.SequenceEqual(calculatedHash);
         }
     }
 }
