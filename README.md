@@ -56,7 +56,7 @@ This project abstracts most of the implementation away from the developer so tha
 
 ## Usage
 
-In your project use nuget to add a reference to your project:
+In your project use nuget to add a reference to credentials:
 
 `Install-Package Credentials`
 
