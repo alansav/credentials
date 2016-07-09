@@ -5,7 +5,7 @@ namespace Savage.Credentials
     public class HashTests
     {
         [Fact]
-        public void TestHashBytes()
+        public void HashBytes_Should_use_sha512()
         {
             byte[] data = Convert.FromBase64String("bw3C6yRwUkVmm6dngM6udw==");
            
