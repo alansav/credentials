@@ -137,29 +137,64 @@ This object has the following properties available:
 `var clearTextToken = token.ClearTextToken //an array of bytes (length = 24);`
 
 The ClearTextToken is what we would sent to the user (possibly as a querystring value in a link which they can click to complete the next stage of a password reset)
-`var clearTextTokenBase64 = Convert.ToBase64String(clearTextToken); // r13j4F4NzthuXOICMHLz1UbmVeTS9QC8`
+`var clearTextTokenBase64 = Convert.ToBase64String(clearTextToken); // "mO1/7D+Rk+WnfF5UrKzlOWw7DB410hRn"`
 
-We would not want to store the ClearTextToken in the database so we would call the GetHashedToken value and store that in the database:
-`var hashedToken = token.GetHashedToken(); //an array of bytes (length = 64)`
+We should not store the ClearTextToken in the database becuase this would allow a user with a compromised database to complete the reset password process for any users who have not yet completed the process. We would call the HashToken value and store the value returned in the database:
+`var hashedToken = token.HashToken(); //an array of bytes (length = 64)`
 
 or if we prefer we could store the hashed token as a string in the database:
-`var hashedTokenBase64 = Convert.ToBase64String(hashedToken); //ofDSQoCBaHJkZ6jtBj8iVtaUp8+aRWkfGrT2l09AZ+b1NdWqNveNGZkfg8BZPMUeaZfsQZJAnOFkBEJ3+yWcTA==`
+`var hashedTokenBase64 = Convert.ToBase64String(hashedToken); // "LFs8pEoU6GUL7z9mRbT8970SGUWkRNNWYsDYqSe75ObG7Z9m+RCv9ouDrWynp++Uw53Ip2uC5jBfBxBWqhiMrA=="`
 
 We might have a table in our database called reset_password which would contain this row of data:
 
 | id | username | date_issued | hashed_token | date_verified |
 | --- | --- | --- | --- | --- |
-| 123 | bob | 2016-07-08 08:00:00 | ofDSQoCBaHJkZ6jtBj8iVtaUp8+aRWkfGrT2l09AZ+b1NdWqNveNGZkfg8BZPMUeaZfsQZJAnOFkBEJ3+yWcTA== | null |
+| 123 | bob | 2016-07-08 08:00:00 | LFs8pEoU6GUL7z9mRbT8970SGUWkRNNWYsDYqSe75ObG7Z9m+RCv9ouDrWynp++Uw53Ip2uC5jBfBxBWqhiMrA== | null |
+
+Note you will want to use Url.Encode function to encode the clear text token in the querystring first becuase base 64 encoded strings can contain characters such as plus and forward slash which have a different meaning when used in a querystring. To Url encode a value we use the following code:
+
+`var urlEncodedclearTextTokenBase64 = System.Net.WebUtility.UrlEncode(clearTextTokenBase64); // "mO1%2F7D%2BRk%2BWnfF5UrKzlOWw7DB410hRn" `
 
 The user would then receive an email with a link containing something like:
 
-http://example.org?id=123&token=r13j4F4NzthuXOICMHLz1UbmVeTS9QC8
+http://example.org/complete_reset_password?id=123&token=mO1%2F7D%2BRk%2BWnfF5UrKzlOWw7DB410hRn
 
 The querystring id would reference the id for the password reset and the token is the clear text token encoded to a base64 string. 
 
-Note you will want to use Url.Encode function to encode the values in the querystring first, using the following code:
+#### Completing the reset password process
 
-`var urlEncodedHashedTokenBase64 = System.Net.WebUtility.UrlEncode(hashedTokenBase64);`
+When the user clicks the link in their email this would take them to a page which reads the 2 querystring values in and then validates if the token is valid:
+
+```
+//Retrieve these values from the querystring
+var id = 123;
+var tokenValue = "mO1/7D+Rk+WnfF5UrKzlOWw7DB410hRn";
+var tokenBytes = Convert.FromBase64String(tokenValue);
+ 
+//Retrieve the hashedToken from the database for id=123
+var hashedTokenFromDatabase = "LFs8pEoU6GUL7z9mRbT8970SGUWkRNNWYsDYqSe75ObG7Z9m+RCv9ouDrWynp++Uw53Ip2uC5jBfBxBWqhiMrA==";
+var hashedTokenFromDatabaseBytes = Convert.FromBase64String(hashedTokenFromDatabase);
+  
+//Compare the hash for the token with the known hash stored in the database
+var token = Savage.Credentials.Token.Load(tokenBytes);
+bool match = token.CompareToken(hashedTokenFromDatabaseBytes);
+
+//If successful:
+if (match)
+{
+    var newPassword = "password"; //Retrieve the new password from the form
+    var saltAndHashedPassword = Savage.Credentials.SaltAndHashedPassword.New("newPassword");
+
+    //TODO: Store the value for credentials.Salt and credentials.HashedPassword in the database
+    //TODO: Update the database to set the date_verified to the current timestamp for reset_password id 123
+}
+```
+
+If match is true then the next step is to retrieve the new password the user entered on the page and generate a new salt and hashed password. We should also set the date_verified to the current timestamp and add checks to ensure that we reject the reset request if the date_verified value is not null (i.e. it has already been used).
+
+###Summary
+No web application should be storing the passwords in clear text, developers should ensure that all passwords are hashed as this will help protect the users and commercial interests of the owner of the web application.
+Using the credentials project provides developers with the capability to handle passwords for users in a secure, consistent and repeatable manor. 
 
 ## Technical Details
 
@@ -170,3 +205,5 @@ The salt uses the [random bytes generator](https://github.com/alansav/random_byt
 The algorithm to generate the bytes is applied 1024 times to generate a key of 256 bytes.
 
 The key is then hashed using the algorithm SHA-512.
+
+The token also uses the [random bytes generator](https://github.com/alansav/random_bytes_generator to generate a token with a length specified by the user. The token is hashed using the algorithm SHA-512.
