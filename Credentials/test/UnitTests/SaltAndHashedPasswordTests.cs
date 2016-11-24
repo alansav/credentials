@@ -76,6 +76,15 @@ namespace Savage.Credentials
         }
 
         [Fact]
+        public void ComparePassword_Should_return_false_when_iteration_differs()
+        {
+            var initial = SaltAndHashedPassword.New("password");
+            var subject = SaltAndHashedPassword.Load(initial.Salt, initial.HashedPassword, 1025);
+
+            Assert.False(subject.ComparePassword("password"));
+        }
+
+        [Fact]
         public void LoadSaltAndHashedPassword_Should_Initialize_Salt()
         {
             var initial = SaltAndHashedPassword.New("password");
