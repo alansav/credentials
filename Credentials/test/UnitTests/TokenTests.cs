@@ -49,6 +49,7 @@ namespace Savage.Credentials
             Assert.Throws<ArgumentNullException>(() => Token.Load(null));
         }
 
+        [Fact]
         public void Load_Should_throw_exception_when_clearTextToken_is_empty()
         {
             var emptyBytes = new byte[0];

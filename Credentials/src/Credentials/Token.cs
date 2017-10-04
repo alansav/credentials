@@ -21,6 +21,8 @@ namespace Savage.Credentials
         {
             if (clearTextToken == null)
                 throw new ArgumentNullException(nameof(clearTextToken));
+            if (clearTextToken.Length == 0)
+                throw new ArgumentException("Cannot load Token from an array which contains zero bytes.");
 
             return new Token(clearTextToken);
         }
