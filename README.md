@@ -1,5 +1,7 @@
 # credentials
 
+[![Build status](https://ci.appveyor.com/api/projects/status/vs331wn4g0qrtgr0?svg=true)](https://ci.appveyor.com/project/alansav/credentials)
+
 This project is a .NET Standard 2.0 class library.
 
 This project is designed to help ensure that passwords are handled using the current best practice.
