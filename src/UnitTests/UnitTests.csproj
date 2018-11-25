@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Savage.Credentials\Savage.Credentials.csproj" />
+    <ProjectReference Include="..\Credentials\Credentials.csproj" />
   </ItemGroup>
 
   <ItemGroup>

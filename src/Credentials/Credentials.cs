@@ -1,6 +1,13 @@
 ﻿namespace Savage.Credentials
 {
-    public class Credentials
+    public interface ICredentials
+    {
+        string Username { get; }
+        string Password { get; }
+        SaltAndHashedPassword CreateSaltAndHashedPassword();
+    }
+
+    public class Credentials : ICredentials
     {
         public readonly string Username;
         public readonly string Password;
