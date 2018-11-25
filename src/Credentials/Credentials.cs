@@ -9,8 +9,8 @@
 
     public class Credentials : ICredentials
     {
-        public readonly string Username;
-        public readonly string Password;
+        public string Username { get; private set; }
+        public string Password { get; private set; }
 
         public Credentials(string username, string password)
         {
