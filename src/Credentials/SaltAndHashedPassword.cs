@@ -30,18 +30,39 @@ namespace Savage.Credentials
         {
             return new SaltAndHashedPassword(salt, hashedPassword, iterations);
         }
+
+        public static SaltAndHashedPassword Load(string passwordHashAsString)
+        {
+            var elements = passwordHashAsString.Split('$');
+            if (elements.Length != 5)
+            {
+                throw new ArgumentException($"Unable to parse: {nameof(passwordHashAsString)}");
+            }
+            var salt = Convert.FromBase64String(elements[2]);
+            var iterations = int.Parse(elements[3]);
+            var hashedPassword = Convert.FromBase64String(elements[4]);
+
+            return Load(salt, hashedPassword, iterations);
+        }
         
         private static byte[] HashPassword(byte[] salt, string password, int iterations)
         {
-            var passwordDeriveBytes = new Rfc2898DeriveBytes(password, salt, iterations);
-            var key = passwordDeriveBytes.GetBytes(256);
-            return Hash.HashBytes(key);
+            using (var passwordDeriveBytes = new Rfc2898DeriveBytes(password, salt, iterations))
+            {
+                var key = passwordDeriveBytes.GetBytes(256);
+                return Hash.HashBytes(key);
+            }
         }
 
         public bool ComparePassword(string password)
         {
             var calculatedHash = HashPassword(Salt, password, Iterations);
             return HashedPassword.SequenceEqual(calculatedHash);
+        }
+
+        public override string ToString()
+        {
+            return $"$rfc2898${Convert.ToBase64String(Salt)}${Iterations}${Convert.ToBase64String(HashedPassword)}";
         }
     }
 }
