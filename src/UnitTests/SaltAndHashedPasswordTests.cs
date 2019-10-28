@@ -123,5 +123,32 @@ namespace Savage.Credentials
 
             Assert.False(subject.ComparePassword("incorrect"));
         }
+
+        [Fact]
+        public void ToString_returns_expected_string()
+        {
+            var initial = SaltAndHashedPassword.New("password");
+
+            var subject = initial.ToString();
+
+            var elements = subject.Split('$');
+
+            Assert.Equal("rfc2898", elements[1]);
+            Assert.Equal(initial.Salt, Convert.FromBase64String(elements[2]));
+            Assert.Equal(initial.Iterations, int.Parse(elements[3]));
+            Assert.Equal(initial.HashedPassword, Convert.FromBase64String(elements[4]));
+        }
+
+        [Fact]
+        public void Load_with_string_sets_values_as_expected()
+        {
+            var initial = SaltAndHashedPassword.New("password");
+            var compare = SaltAndHashedPassword.Load(initial.ToString());
+
+            Assert.Equal(initial.Salt, compare.Salt);
+            Assert.Equal(initial.Iterations, compare.Iterations);
+            Assert.Equal(initial.HashedPassword, compare.HashedPassword);
+        }
+
     }
 }

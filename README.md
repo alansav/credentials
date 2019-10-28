@@ -39,6 +39,13 @@ var saltBase64 = Convert.ToBase64String(salt); // zXoXq8NcGEIvqAPPuO7xjA==
 var hashedPasswordBase64 = Convert.ToBase64String(hashedPassword); // 8wiaJrVMxNjKtMwl8iqhlQ4ylO2ta30wFoI8tJG62bJnuQPhZStFQqJzx2U2zuJ4mZg0Bg1ACaXcVQFe8ywnmg==
 ```
 
+We can also call ToString() to return the salt and hashedPassword in a single string, such as the below:
+```
+var store = saltAndHashedPassword.ToString()
+$rfc2898$y3eYXhWaoWOZ2AVpalMHPQ==$1024$ZFmqzmel+RuufuP60q/cZaN+GZsdH5vccBMLu/gL199LcGz1VgBpC8oaup9ZC4xnummFAyWfTnzOL0R5pv+WWQ==
+```
+
+
 The database table may look like
 
 | username | salt | hashed_password |
