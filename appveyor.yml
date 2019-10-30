@@ -1,26 +1,55 @@
-version: 2.0.0.{build}
-pull_requests:
-  do_not_increment_build_number: true
-image: Visual Studio 2019
-configuration: Release
-clone_depth: 1
-dotnet_csproj:
-  patch: true
-  file: '**\*.csproj'
-  version: '{version}'
-  package_version: '{version}'
-  assembly_version: '{version}'
-  file_version: '{version}'
-  informational_version: '{version}'
-before_build:
-- cmd: dotnet restore src
-build:
-  project: src
-  publish_nuget: true
-  publish_nuget_symbols: true
-  verbosity: minimal
-deploy:
-- provider: NuGet
-  api_key:
-    secure: JIXBuXT5w3Xu82NM/mUdzwp+bM0iXMtuF5ZCnrAwuMsqeAthe1jxsqKCVWXzGOxt
-  skip_symbols: false
+-
+  branches:
+    only:
+      - master
+  version: 2.0.0.{build}
+  pull_requests:
+    do_not_increment_build_number: true
+  image: Visual Studio 2019
+  configuration: Release
+  clone_depth: 1
+  dotnet_csproj:
+    patch: true
+    file: '**\*.csproj'
+    version: '{version}'
+    package_version: '{version}'
+    assembly_version: '{version}'
+    file_version: '{version}'
+    informational_version: '{version}'
+  before_build:
+  - cmd: dotnet restore src
+  build:
+    project: src
+    publish_nuget: true
+    publish_nuget_symbols: true
+    use_snupkg_format: true
+    verbosity: minimal
+  deploy:
+  - provider: NuGet
+    symbol_server: https://api.nuget.org/v3/index.json
+    api_key:
+      secure: JIXBuXT5w3Xu82NM/mUdzwp+bM0iXMtuF5ZCnrAwuMsqeAthe1jxsqKCVWXzGOxt
+    artifact: /.*\.symbols\.snupkg/
+
+-
+  version: 2.0.0.{build}
+  pull_requests:
+    do_not_increment_build_number: true
+  image: Visual Studio 2019
+  configuration: Release
+  clone_depth: 1
+  dotnet_csproj:
+    patch: true
+    file: '**\*.csproj'
+    version: '{version}'
+    package_version: '{version}'
+    assembly_version: '{version}'
+    file_version: '{version}'
+    informational_version: '{version}'
+  before_build:
+  - cmd: dotnet restore src
+  build:
+    project: src
+    publish_nuget: false
+    publish_nuget_symbols: false
+    verbosity: minimal
