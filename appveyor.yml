@@ -15,10 +15,10 @@
     assembly_version: '{version}'
     file_version: '{version}'
     informational_version: '{version}'
-  build:
-  - cmd: dotnet build -c Release -v minimal src/Credentials.sln
+  build_script:
+  - cmd: dotnet build -c Release -v minimal src\Credentials.sln
   after_build:
-  - cmd: dotnet pack -v minimal --include-symbols --no-build src/Credentials/Credentials.csproj
+  - cmd: dotnet pack -v minimal --include-symbols --no-build src\Credentials/Credentials.csproj
   test:
     assemblies:
       - '**\UnitTests.dll'
@@ -43,10 +43,10 @@
     assembly_version: '{version}'
     file_version: '{version}'
     informational_version: '{version}'
-  build:
-  - cmd: dotnet build -c Release -v minimal src/Credentials.sln
+  build_script:
+  - cmd: dotnet build -c Release -v minimal src\Credentials.sln
   after_build:
-  - cmd: dotnet pack -v minimal --include-symbols --no-build src/Credentials/Credentials.csproj
+  - cmd: dotnet pack -v minimal --include-symbols --no-build src\Credentials/Credentials.csproj
   test:
     assemblies:
       - '**\UnitTests.dll'
