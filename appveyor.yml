@@ -6,7 +6,6 @@
   pull_requests:
     do_not_increment_build_number: true
   image: Visual Studio 2019
-  configuration: Release
   clone_depth: 1
   dotnet_csproj:
     patch: true
@@ -16,14 +15,13 @@
     assembly_version: '{version}'
     file_version: '{version}'
     informational_version: '{version}'
-  before_build:
-  - cmd: dotnet restore src
   build:
-    project: src
-    publish_nuget: true
-    publish_nuget_symbols: true
-    use_snupkg_format: true
-    verbosity: minimal
+  - cmd: dotnet build -c Release -v minimal src/Credentials.sln
+  after_build:
+  - cmd: dotnet pack -v minimal --include-symbols --no-build src/Credentials/Credentials.csproj
+  test:
+    assemblies:
+      - '**\UnitTests.dll'
   deploy:
   - provider: NuGet
     symbol_server: https://api.nuget.org/v3/index.json
@@ -32,11 +30,10 @@
     artifact: /.*\.s?nupkg/
 
 -
-  version: 2.0.0.{build}
+  version: 2.0.0.{build} 
   pull_requests:
     do_not_increment_build_number: true
   image: Visual Studio 2019
-  configuration: Release
   clone_depth: 1
   dotnet_csproj:
     patch: true
@@ -46,10 +43,10 @@
     assembly_version: '{version}'
     file_version: '{version}'
     informational_version: '{version}'
-  before_build:
-  - cmd: dotnet restore src
   build:
-    project: src
-    publish_nuget: false
-    publish_nuget_symbols: false
-    verbosity: minimal
+  - cmd: dotnet build -c Release -v minimal src/Credentials.sln
+  after_build:
+  - cmd: dotnet pack -v minimal --include-symbols --no-build src/Credentials/Credentials.csproj
+  test:
+    assemblies:
+      - '**\UnitTests.dll'
