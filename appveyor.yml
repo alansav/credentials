@@ -28,7 +28,6 @@
     api_key:
       secure: JIXBuXT5w3Xu82NM/mUdzwp+bM0iXMtuF5ZCnrAwuMsqeAthe1jxsqKCVWXzGOxt
     artifact: /.*\.s?nupkg/
-
 -
   version: 2.0.0.{build} 
   pull_requests:
