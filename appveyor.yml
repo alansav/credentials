@@ -18,12 +18,15 @@
   - cmd: dotnet pack -c Release -v minimal --no-build -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg src\Credentials\Credentials.csproj
   artifacts:
     - path: 'src\**\*.nupkg'
-      name: nuget packages
+      name: nuget package
+    - path: 'src\**\*.snupkg'
+      name: nuget symbol package
   deploy:
   - provider: NuGet
     symbol_server: https://api.nuget.org/v3/index.json
     api_key:
       secure: JIXBuXT5w3Xu82NM/mUdzwp+bM0iXMtuF5ZCnrAwuMsqeAthe1jxsqKCVWXzGOxt
+    artifact: /.*\.s?nupkg/
 -
   branches:
     except:
