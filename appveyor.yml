@@ -21,7 +21,7 @@
     symbol_server: https://api.nuget.org/v3/index.json
     api_key:
       secure: JIXBuXT5w3Xu82NM/mUdzwp+bM0iXMtuF5ZCnrAwuMsqeAthe1jxsqKCVWXzGOxt
-    artifact: /.*\.s?nupkg/
+    artifact: src\Credentials\bin\Release\*.nupkg
 -
   branches:
     except:
