@@ -10,10 +10,8 @@
   build_script:
   - cmd: dotnet build -c Release -v minimal src\Credentials.sln
   after_build:
-  - cmd: dotnet pack -c Release -v minimal --include-symbols --no-build src\Credentials/Credentials.csproj
-  test:
-    assemblies:
-      - '**\UnitTests.dll'
+  - cmd: dotnet test -c Release -v minimal --no-build src\Credentials.sln
+  - cmd: dotnet pack -c Release -v minimal --include-symbols --no-build src\Credentials\Credentials.csproj
   deploy:
   - provider: NuGet
     symbol_server: https://api.nuget.org/v3/index.json
@@ -32,7 +30,5 @@
   build_script:
   - cmd: dotnet build -c Release -v minimal src\Credentials.sln
   after_build:
-  - cmd: dotnet pack -c Release -v minimal --include-symbols --no-build src\Credentials/Credentials.csproj
-  test:
-    assemblies:
-      - '**\UnitTests.dll'
+  - cmd: dotnet test -c Release -v minimal --no-build src\Credentials.sln
+  - cmd: dotnet pack -c Release -v minimal --include-symbols --no-build src\Credentials\Credentials.csproj
