@@ -18,7 +18,7 @@
   - cmd: dotnet pack -c Release -v minimal --include-symbols --no-build src\Credentials\Credentials.csproj
   artifacts:
     - path: 'src\**\*.nupkg'
-    - name: nuget packages
+      name: nuget packages
   deploy:
   - provider: NuGet
     symbol_server: https://api.nuget.org/v3/index.json
