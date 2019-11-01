@@ -16,12 +16,15 @@
   after_build:
   - cmd: dotnet test -c Release -v minimal --no-build src\Credentials.sln
   - cmd: dotnet pack -c Release -v minimal --include-symbols --no-build src\Credentials\Credentials.csproj
+  artifacts:
+    - path: 'src\**\*.nupkg'
+      name: nuget packages
   deploy:
   - provider: NuGet
     symbol_server: https://api.nuget.org/v3/index.json
     api_key:
       secure: JIXBuXT5w3Xu82NM/mUdzwp+bM0iXMtuF5ZCnrAwuMsqeAthe1jxsqKCVWXzGOxt
-    artifact: src\Credentials\bin\Release\*.nupkg
+    artifact: '*.nupkg'
 -
   branches:
     except:
