@@ -25,7 +25,7 @@
   - provider: NuGet
     symbol_server: https://api.nuget.org/v3/index.json
     api_key:
-      secure: JIXBuXT5w3Xu82NM/mUdzwp+bM0iXMtuF5ZCnrAwuMsqeAthe1jxsqKCVWXzGOxt
+      secure: VYKi8NEuQDj3Y8t0pRI+GncETpXaLNoCRSLlQlg8r5be+CN84ahiCk1r+gRKn8cR
     artifact: /.*\.s?nupkg/
 -
   branches:
